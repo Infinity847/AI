@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                text-align:center;
+                background-color:green;
+            }
+            input {
+                background-color:lightgreen;
+                border:1px solid green;
+                border-radius:5px;
+            }
+            .chats {
+                background-color:lightgreen;
+                border-radius:5px;
+                width:400px;
+                border:0px solid blue;
+            }
+            .msg {
+                background-color:white;
+                border:0px solid blue;
+                color:black;
+                font-family:Arial;
+                font-size:16px;
+                border-radius:5px;
+            }
+            .msgbot {
+                background-color:blue;
+                border:0px solid white;
+                color:white;
+                font-family:Arial;
+                font-size:16px;
+                border-radius:5px;
+            }
+            button {
+                color:blue;
+                background-color:lightgreen;
+                border-radius:5px;
+                border:0px solid white;
+                cursor:pointer;
+            }
+            p{
+                color:green;
+                font-size:18px;
+                font-family:Arial;
+            }
+            #popup {
+                color:blue;
+                background-color:white;
+                font-family:Arial;
+                width:400px;
+                border-radius:5px;
+            }
+        </style>
+        <script src = "https://infinity847.github.io/HRS-2.14/HRS.js"></script>
+        <script src = "https://database.timothygribov.repl.co/script.js"></script>
+        <title>AI BOT</title>
+    </head>
+<body>
+    <br><br><center>
+    <div id = "messages" class = "chats">
+        <br>
+        <p id = "time"></p>
+        <br>
+        <span class = "msgbot"style='float:left;margin-left:10px;'>Hello, how may I help you?</span><br><br>
+    </div>
+    </center><br>
+    <span>
+    <input id = "input"><button onclick = "ask()">Send</button><button onclick = "popup()">About</button></span>
+    <center>
+        <div id = "popup">
+<h2>About</h2><br>
+<label>
+This app is about an AI talking to you. The AI is made with HRSCRIPT.js, and Javascript. The database stores samples. Credits to : Replit, and HRSCRIPT.js .
+</label>
+        </div>
+    </center>
+
+    <script>
+        const input = document.getElementById("input");
+        const msg = document.getElementById("messages");
+        const timecount= document.getElementById("time");
+        const about = document.getElementById("popup");
+        const api = $Import("ChatBot");
+        var webdata = {
+            loadeditems:0
+        }
+        while(webdata.loadeditems<database.info.utterances.length) {
+api.AddUtterance(database.info.utterances[webdata.loadeditems]);
+api.AddResponse(database.info.responses[webdata.loadeditems]);
+webdata.loadeditems++;
+        }
+webdata.loadeditems=0;
+while(webdata.loadeditems<database.info.alternatives.length) {
+    api.AddAlternative(database.info.alternatives[webdata.loadeditems])
+    webdata.loadeditems++;
+}
+        let time = new Date();
+if (time.getHours()>12) {
+    if (time.getMinutes()<10) {
+        timecount.innerHTML=`${parseInt(time.getHours())-12}:0${time.getMinutes()} PM`;
+    }else {
+        timecount.innerHTML=`${parseInt(time.getHours())-12}:${time.getMinutes()} PM`;
+    }
+}else {
+    if (time.getMinutes()<10) {
+        timecount.innerHTML=`${parseInt(time.getHours())}:0${time.getMinutes()} AM`;
+    }else {
+        timecount.innerHTML=`${parseInt(time.getHours())}:${time.getMinutes()} AM`;
+    }
+}
+function ask() {
+    if (input.value == undefined||input.value == "") {
+    alert("Please enter something in the input.");
+}else {      
+    let fixedstring = input.value.replaceAll(".","");
+    fixedstring = fixedstring.replaceAll(",","");
+    fixedstring = fixedstring.replaceAll("!","");
+    fixedstring = fixedstring.replaceAll("?","");
+    fixedstring = fixedstring.replaceAll("(","");
+    fixedstring = fixedstring.replaceAll(")","");
+    fixedstring = fixedstring.replaceAll(";","");
+    fixedstring = fixedstring.replaceAll(" ","");
+    fixedstring = fixedstring.toLowerCase();
+        msg.innerHTML+=`<br><span class = 'msg'style='float:right;margin-right:10px;'>${input.value}</span><br>`;
+        msg.innerHTML+=`<br><span class = 'msgbot'style='float:left;margin-left:10px;'>${api.GiveResult(fixedstring)}</span><br><br>`;
+        input.value="";
+}
+
+}
+about.style.display="none";
+function popup() {
+if (about.style.display == "block") {
+    about.style.display="none";
+}else {
+    about.style.display="block";
+}
+}
+    </script>
+</body>
+</html>
